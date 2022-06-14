@@ -1,10 +1,12 @@
 const { db } = require("./db/dbConnection");
+const insert = require("./db/insert");
+const select = require("./db/select");
 
 beforeEach(() => db("users").truncate());
 
 describe('user registration', () => {
     test('insert user', async () => {
-        await db("users").insert({
+        const user = {
             firstName: "Szymon",
             sureName: "Dawidowicz",
             email: "cykcykacz@gmail.com",
@@ -12,17 +14,18 @@ describe('user registration', () => {
             gender: "M",
             dateOfBirth: "28-09-1985",
             comments: "asdzxcfhvbn"
-        });
+        };
 
-        const user = await db("users")
-            .select()
-            .where({ firstName: "Szymon"});
-        
-        expect(user[0].firstName).toEqual("Szymon");
+        await insert(user);
+
+        const retriveUser = await select.firstName("Szymon");
+
+        expect(retriveUser[0].firstName).toEqual("Szymon");
     });
 
     test('duplicate email', async () => {
-        await db("users").insert({
+
+        const user1 = {
             firstName: "Szymon",
             sureName: "Dawidowicz",
             email: "cykcykacz@gmail.com",
@@ -30,8 +33,8 @@ describe('user registration', () => {
             gender: "M",
             dateOfBirth: "28-09-1985",
             comments: "asdzxcfhvbn"
-        });
-        await db("users").insert({
+        };
+        const user2 = {
             firstName: "Robert",
             sureName: "Lewandowski",
             email: "cykcykacz@gmail.com",
@@ -39,11 +42,13 @@ describe('user registration', () => {
             gender: "M",
             dateOfBirth: "28-09-1985",
             comments: "asdzxcfhvbn"
-        });
+        };
 
-        const user = await db("users")
-            .select();
-
-        console.log('user', user);
+        try {
+            await insert(user1);
+            await select.duplicateEmail(user2.email);
+        } catch(err) {
+            expect(err).toEqual("This email exist!!!");
+        }
     });
 });
