@@ -29,5 +29,9 @@ describe("user end point", () => {
     expect(response.body).toEqual({
         message: "Szymon created account"
     });
+
+    const userFromDb = await select.firstName(user.firstName);
+
+    expect(userFromDb[0].firstName).toEqual(user.firstName);
   });
 });
