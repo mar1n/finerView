@@ -10,8 +10,9 @@ describe("user end point", () => {
   test("adding user", async () => {
     const response = await request(app)
         .post("/users")
-        .send({ user: "Data"})
         .expect(200)
         .expect("Content-Type", /json/);
+
+    expect(response.body).toEqual("Welcome");
   });
 });
