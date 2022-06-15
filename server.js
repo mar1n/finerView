@@ -7,8 +7,10 @@ const router = new Router();
 
 app.use(bodyParser());
 
-router.post("/users", async (ctx) => {
-  ctx.body = { message: "Welcome" };
+router.put("/users", async (ctx) => {
+  const { firstName } = ctx.request.body;
+
+  ctx.body = { message: `${firstName} created account` };
   ctx.status = 200;
 });
 
