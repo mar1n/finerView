@@ -5,24 +5,17 @@ const { app } = require("./server");
 const insert = require("./db/insert");
 const select = require("./db/select");
 
+const { user1 } = require("./utils/user");
+
 afterAll(() => app.close());
 
 beforeEach(() => db("users").truncate());
 
 describe("user end point", () => {
   test("adding user", async () => {
-    const user = {
-        firstName: "Szymon",
-        sureName: "Dawidowicz",
-        email: "cykcykacz@gmail.com",
-        phoneNumber: "7784701540",
-        gender: "M",
-        dateOfBirth: "28-09-1985",
-        comments: "asdzxcfhvbn"
-    };
     const response = await request(app)
         .put("/users")
-        .send(user)
+        .send(user1)
         .expect(200)
         .expect("Content-Type", /json/);
 
@@ -30,8 +23,11 @@ describe("user end point", () => {
         message: "Szymon created account"
     });
 
-    const userFromDb = await select.firstName(user.firstName);
+    const userFromDb = await select.firstName(user1.firstName);
 
-    expect(userFromDb[0].firstName).toEqual(user.firstName);
+    expect(userFromDb[0].firstName).toEqual(user1.firstName);
+  });
+  test('duplicate email', () => {
+    
   });
 });
