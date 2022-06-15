@@ -1,11 +1,15 @@
-import './App.css';
-import Registration  from './Registration';
+import "./App.css";
+import Registration from "./Registration";
+import Accordion from "./Accordion";
 function App() {
   return (
-    <div className="App">
+    <div className='App'>
       <Registration />
+      <Accordion />
     </div>
   );
 }
+
+
 
 export default App;
