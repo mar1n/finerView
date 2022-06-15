@@ -4,6 +4,7 @@ const select = require("./db/select");
 const { user1, user2 } = require("./utils/user")
 
 beforeEach(() => db("users").truncate());
+afterEach(() => db("users").truncate());
 
 describe('user registration', () => {
     test('insert user', async () => {
