@@ -14,6 +14,7 @@ app.use(bodyParser());
 router.put("/users", async (ctx) => {
   const { firstName } = ctx.request.body;
 
+  const userExist = await select
   await insert(ctx.request.body);
 
   ctx.body = { message: `${firstName} created account` };

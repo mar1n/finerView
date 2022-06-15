@@ -28,6 +28,14 @@ describe("user end point", () => {
     expect(userFromDb[0].firstName).toEqual(user1.firstName);
   });
   test('duplicate email', () => {
-    
+    const response = await request(app)
+        .put("/users")
+        .send(user2)
+        .expect(409)
+        .expect("Content-Type", /json/);
+
+    expect(response.body).toEqual({
+        message: "This email is in use"
+    });
   });
 });
