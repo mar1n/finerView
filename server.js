@@ -14,13 +14,20 @@ app.use(bodyParser());
 app.use(cors());
 
 router.put("/users", async (ctx) => {
-  const { firstName } = ctx.request.body;
-  console.log("ctx.request.body", ctx.request.body);
-  //const userExist = await select;
-  await insert(ctx.request.body);
-  console.log("firstName", firstName);
-  ctx.body = { message: `${firstName} created account` };
-  ctx.status = 200;
+  const { firstName, email } = ctx.request.body;
+  const user = ctx.request.body;
+
+  try {
+    await select.duplicateEmail(email);
+    await insert(user);
+    ctx.body = { message: `${firstName} created account` };
+    ctx.status = 200;
+
+  } catch(error) {
+    ctx.body = { message: "This email is in use"};
+    ctx.status = 409
+  }
+
 });
 
 app.use(router.routes());

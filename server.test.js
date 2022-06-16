@@ -5,7 +5,7 @@ const { app } = require("./server");
 const insert = require("./db/insert");
 const select = require("./db/select");
 
-const { user1 } = require("./utils/user");
+const { user1, user2 } = require("./utils/user");
 
 afterAll(() => app.close());
 
@@ -28,15 +28,16 @@ describe("user end point", () => {
 
     expect(userFromDb[0].firstName).toEqual(user1.firstName);
   });
-  // test('duplicate email', () => {
-  //   const response = await request(app)
-  //       .put("/users")
-  //       .send(user2)
-  //       .expect(409)
-  //       .expect("Content-Type", /json/);
+  test('duplicate email', async () => {
+    await insert(user1);
+    const response = await request(app)
+        .put("/users")
+        .send(user2)
+        .expect(409)
+        .expect("Content-Type", /json/);
 
-  //   expect(response.body).toEqual({
-  //       message: "This email is in use"
-  //   });
-  // });
+    expect(response.body).toEqual({
+        message: "This email is in use"
+    });
+  });
 });
