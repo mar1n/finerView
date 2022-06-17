@@ -1,0 +1,101 @@
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100vw;
+    justify-content: center;
+    align-items: center;
+}
+
+.item {
+    background-color: #DEDEDE;
+    margin-bottom: 5px;
+    padding: 0px 0px;
+    width: 550px;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+.title {
+    background-color: #F0AB0A;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    border-radius: 5px;
+    padding: 15px 0px 15px 5px;
+}
+
+.content {
+    
+    color: #8b7f75;
+    max-height: 0;
+    overflow: hidden;
+    transition: all 0.5s cubic-bezier(0,1,0,1);
+}
+
+.content.first {
+    height: auto;
+    max-height: 9999px;
+    transition: all 0.5s cubic-bezier(1,0,1,0);
+}
+.content.second {
+    height: auto;
+    max-height: 9999px;
+    transition: all 0.5s cubic-bezier(1,0,1,0);
+}
+.content.third {
+    height: auto;
+    max-height: 9999px;
+    transition: all 0.5s cubic-bezier(1,0,1,0);
+}
+
+.itemFirst {
+    display: flex;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.itemButton {
+    display: flex;
+    justify-content: flex-end;
+}
+.nextButton {
+    background-color: #6059AF;
+    border-radius: 4px;
+    color: #fff;
+    width: 100px;
+    margin: 0 10px 5px 0;
+}
+
+.itemSecond {
+    display: flex;
+}
+
+.specialDate {
+    display: flex;
+}
+.specialDate input {
+    width: 20px;
+    margin: 0 0 0 5px;
+    border-radius: 5px;
+}
+
+label {
+    font-weight: bold;
+    color: #000;
+    margin: 0px 0px 0px 5px;
+}
+
+input {
+    background-color:#fff;
+    border-radius: 5px;
+    border: 0px;
+    box-shadow:inset 2px 1px 6px #888;
+    margin: 0px 0px 0px 5px;
+    height: 25px;
+}
