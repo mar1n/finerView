@@ -1,18 +1,16 @@
 import { useState } from "react";
 import "./Registration.css";
-import { User, Accord } from "./utils/interface";
-import { initialState} from "./utils/values";
+import { User, Accord, Err } from "./utils/interface";
+import { initialState, errorState, accordionState } from "./utils/values";
 import axios from "axios";
-
 
 const Registration = () => {
   const [user, setUser] = useState<User>(initialState);
 
-  const [accordion, setAccordion] = useState<Accord>({
-    first: true,
-    second: false,
-    third: false,
-  });
+  const [accordion, setAccordion] = useState<Accord>(accordionState);
+
+  const [errors, setErrors] = useState<Err>(errorState);
+
   const {
     firstName,
     lastName,
@@ -25,6 +23,17 @@ const Registration = () => {
     year,
   } = user;
   const { first, second, third } = accordion;
+  const {
+    firstNameErr,
+    lastNameErr,
+    emailErr,
+    phoneNumberErr,
+    commentsErr,
+    genderErr,
+    dayErr,
+    monthErr,
+    yearErr,
+  } = errors;
 
   const toggle = (
     accord1: string,
@@ -32,7 +41,18 @@ const Registration = () => {
     accord2: string,
     value2: boolean
   ) => {
-    setAccordion({ ...accordion, [accord1]: value1, [accord2]: value2 });
+    if (accord1 === "first") {
+      console.log("move");
+      if(validateDetails()) {
+        setAccordion({ ...accordion, [accord1]: value1, [accord2]: value2 });
+      }
+    }
+    if (accord1 === "second") {
+      console.log("move2");
+      if(validateDetails2()) {
+        setAccordion({ ...accordion, [accord1]: value1, [accord2]: value2 });
+      }
+    }
   };
   const handleChange =
     (name: string) =>
@@ -49,8 +69,64 @@ const Registration = () => {
       setUser({ ...user, [name]: event?.currentTarget?.value });
     };
 
+  const validateDetails = () => {
+    console.log("validate");
+    let firstNameErr = "";
+    let lastNameErr = "";
+    let emailErr = "";
+    let phoneNumberErr = "";
+    let genderErr = "";
+
+    if (!firstName) {
+      firstNameErr = "first Name cannot be blank";
+    }
+
+    if (!lastName) {
+      lastNameErr = "last Name cannot be blank";
+    }
+
+    if (!email.includes("@")) {
+      emailErr = "invalid email";
+    }
+
+    // if (!phoneNumber) {
+    //   phoneNumberErr = "phone number cannot be blank";
+    // }
+
+    // if(!gender) {
+    //   console.log('gender');
+    //   genderErr = "Select gender pls";
+    // }
+
+    if (emailErr || firstNameErr || lastNameErr) {
+      setErrors({ ...errors, emailErr, firstNameErr, lastNameErr });
+      return false;
+    }
+    setErrors({ ...errors, emailErr: "", firstNameErr: "", lastNameErr: "" });
+    return true;
+  };
+  const validateDetails2 = () => {
+
+    let phoneNumberErr = "";
+    let genderErr = "";
+
+    if (!phoneNumber) {
+      phoneNumberErr = "phone number cannot be blank";
+    }
+
+    if(!gender) {
+      genderErr = "Select gender pls";
+    }
+
+    if (phoneNumberErr || genderErr) {
+      setErrors({ ...errors, phoneNumberErr, genderErr });
+      return false;
+    }
+    setErrors({ ...errors, phoneNumberErr: "", genderErr: "" });
+    return true;
+  };
+
   const back = async () => {
-    console.log("zxc");
     try {
       const result = await axios.put("http://localhost:3003/users", {
         firstName: firstName,
@@ -61,9 +137,8 @@ const Registration = () => {
         dateOfBirth: "28-09-1985",
         comments: comments,
       });
-      console.log("result", result);
       setUser(initialState);
-      toggle("third", false, "first", false)
+      toggle("third", false, "first", false);
     } catch (err) {
       console.log("err", err);
     }
@@ -87,6 +162,7 @@ const Registration = () => {
                       type='text'
                       value={firstName}
                     />
+                    <div className='error'>{firstNameErr}</div>
                   </div>
                   <div className='form-group'>
                     <label>Last Name</label>
@@ -95,6 +171,7 @@ const Registration = () => {
                       type='text'
                       value={lastName}
                     />
+                    <div className='error'>{lastNameErr}</div>
                   </div>
                 </div>
                 <div className='itemFirst'>
@@ -105,6 +182,7 @@ const Registration = () => {
                       type='email'
                       value={email}
                     />
+                    <div className='error'>{emailErr}</div>
                   </div>
                 </div>
                 <div className='itemFirst itemButton'>
@@ -121,7 +199,6 @@ const Registration = () => {
           <div className='item'>
             <div
               className='title'
-              onClick={() => toggle("second", false, "third", true)}
             >
               <span>Step 2: More comments</span>
             </div>
@@ -135,6 +212,7 @@ const Registration = () => {
                       type='text'
                       value={phoneNumber}
                     />
+                    <div className='error'>{phoneNumberErr}</div>
                   </div>
                   <div className='form-group'>
                     <label>Gender</label>
@@ -145,6 +223,7 @@ const Registration = () => {
                       <option value='Male'>Male</option>
                       <option value='Female'>Female</option>
                     </select>
+                    <div className='error'>{genderErr}</div>
                   </div>
                 </div>
                 <div className='itemSecond'>
@@ -186,7 +265,6 @@ const Registration = () => {
           <div className='item'>
             <div
               className='title'
-              onClick={() => toggle("third", false, "first", false)}
             >
               <span>Step 3: Final comments</span>
             </div>
@@ -202,10 +280,7 @@ const Registration = () => {
                   </div>
                 </div>
                 <div className='itemThird itemButton'>
-                  <div
-                    className='nextButton'
-                    onClick={back}
-                  >
+                  <div className='nextButton' onClick={back}>
                     Next{" "}
                   </div>
                 </div>

@@ -10,6 +10,18 @@ export interface User {
   month: string;
   year: string;
 }
+export interface Err {
+  firstNameErr: string;
+  lastNameErr: string;
+  emailErr: string;
+  phoneNumberErr: string;
+  genderErr: string;
+  dateOfBirthErr: string;
+  commentsErr: string;
+  dayErr: string;
+  monthErr: string;
+  yearErr: string;
+}
 
 export interface Accord {
   first: boolean;
