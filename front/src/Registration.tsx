@@ -11,28 +11,15 @@ const Registration = () => {
 
   const [errors, setErrors] = useState<Err>(errorState);
 
-  const {
-    firstName,
-    lastName,
-    email,
-    phoneNumber,
-    comments,
-    gender,
-    day,
-    month,
-    year,
-  } = user;
+  const { firstName, lastName, email, phoneNumber, comments, gender } = user;
   const { first, second, third } = accordion;
   const {
     firstNameErr,
     lastNameErr,
     emailErr,
     phoneNumberErr,
-    commentsErr,
     genderErr,
-    dayErr,
-    monthErr,
-    yearErr,
+    duplicateEmailErr,
   } = errors;
 
   const toggle = (
@@ -43,13 +30,13 @@ const Registration = () => {
   ) => {
     if (accord1 === "first") {
       console.log("move");
-      if(validateDetails()) {
+      if (validateDetails()) {
         setAccordion({ ...accordion, [accord1]: value1, [accord2]: value2 });
       }
     }
     if (accord1 === "second") {
       console.log("move2");
-      if(validateDetails2()) {
+      if (validateDetails2()) {
         setAccordion({ ...accordion, [accord1]: value1, [accord2]: value2 });
       }
     }
@@ -74,8 +61,6 @@ const Registration = () => {
     let firstNameErr = "";
     let lastNameErr = "";
     let emailErr = "";
-    let phoneNumberErr = "";
-    let genderErr = "";
 
     if (!firstName) {
       firstNameErr = "first Name cannot be blank";
@@ -89,15 +74,6 @@ const Registration = () => {
       emailErr = "invalid email";
     }
 
-    // if (!phoneNumber) {
-    //   phoneNumberErr = "phone number cannot be blank";
-    // }
-
-    // if(!gender) {
-    //   console.log('gender');
-    //   genderErr = "Select gender pls";
-    // }
-
     if (emailErr || firstNameErr || lastNameErr) {
       setErrors({ ...errors, emailErr, firstNameErr, lastNameErr });
       return false;
@@ -106,7 +82,6 @@ const Registration = () => {
     return true;
   };
   const validateDetails2 = () => {
-
     let phoneNumberErr = "";
     let genderErr = "";
 
@@ -114,7 +89,7 @@ const Registration = () => {
       phoneNumberErr = "phone number cannot be blank";
     }
 
-    if(!gender) {
+    if (!gender) {
       genderErr = "Select gender pls";
     }
 
@@ -137,10 +112,12 @@ const Registration = () => {
         dateOfBirth: "28-09-1985",
         comments: comments,
       });
+      console.log("result", result);
       setUser(initialState);
       toggle("third", false, "first", false);
     } catch (err) {
       console.log("err", err);
+      setErrors({ ...errors, duplicateEmailErr: "Email is in use" });
     }
   };
 
@@ -197,9 +174,7 @@ const Registration = () => {
             </div>
           </div>
           <div className='item'>
-            <div
-              className='title'
-            >
+            <div className='title'>
               <span>Step 2: More comments</span>
             </div>
             <div className={second === true ? "content second" : "content"}>
@@ -263,9 +238,7 @@ const Registration = () => {
             </div>
           </div>
           <div className='item'>
-            <div
-              className='title'
-            >
+            <div className='title'>
               <span>Step 3: Final comments</span>
             </div>
             <div className={third === true ? "content third" : "content"}>
@@ -280,6 +253,7 @@ const Registration = () => {
                   </div>
                 </div>
                 <div className='itemThird itemButton'>
+                  <div className='error'>{duplicateEmailErr}</div>
                   <div className='nextButton' onClick={back}>
                     Next{" "}
                   </div>

@@ -18,6 +18,7 @@ export interface Err {
   genderErr: string;
   dateOfBirthErr: string;
   commentsErr: string;
+  duplicateEmailErr: string;
   dayErr: string;
   monthErr: string;
   yearErr: string;

@@ -19,6 +19,7 @@ const errorState = {
   genderErr: "",
   dateOfBirthErr: "",
   commentsErr: "",
+  duplicateEmailErr: "",
   dayErr: "",
   monthErr: "",
   yearErr: "",
